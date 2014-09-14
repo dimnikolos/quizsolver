@@ -1,0 +1,81 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{hyperref}
+\lstset{language=Python}
+\begin{document}
+\title{\vspace{-5em}Computers and math: A trade off}
+\author{@dnikolos}
+\date{}
+
+\maketitle
+\section{The problem}
+Find $a$,$b$,$c$,$d$,$e$,$f$,$g$ so that:
+\begin{equation}
+\begin{array}{ccccc}
+ab     &\cdot & bc &=&dad    \\
+\times &      &\div& &\times   \\
+ec     &\div  & f  &=&f        \\
+\shortparallel      & & \shortparallel & & \shortparallel\\
+bcd &\times & g &=& bbea
+\end{array}
+\end{equation}
+From equation 1, we can derive six expressions.
+\begin{equation}
+\begin{array}{rcl}
+(10\times a+b)\times (10\times b+c)&=&(100\times d+10\times a+d)\\
+(10\times e+c)/f &=& f\\
+(100\times b+10\times c+d)\times g&=& (1000\times b+100\times b+10\times e+a)\\
+(10\times a+b)\times (10\times e+c)&=& (100\times b+10\times c+d)\\
+(10\times b+c)/f &=& g\\
+(100\times d+10\times a+d) \times  f &=& (1000\times b+100\times b+10\times e+a)
+\end{array}
+\end{equation}
+\section{First solution}
+The first and slow solution is to check all possible combinations against the equations.
+Since $f$ appears is the denominator of $bc\div f$ it cannot be zero.
+Here is the first solution written in Python:
+\begin{lstlisting}
+for a in range(0,10):
+  for b in range(0,10):
+    for c in range(0,10):
+      for d in range(0,10):
+        for e in range(0,10):
+          for f in range(1,10):
+            for g in range(0,10):
+              if ((10*a+b)*(10*b+c)==(d*100+a*10+d)):
+                if ((10*e+c)/f == f):
+                  if ((100*b+10*c+d)*g==1000*b+100*b+10*e+a):
+                    if ((10*a+b)*(10*e+c)==(100*b+10*c+d)):
+                      if ((10*b+c)/f == g):
+                        if ((100*d+10*a+d) * f == (1000*b+100*b+10*e+a)):
+                          print(''.join([str(a),str(b),str(c),
+                            str(d),str(e),str(f),str(g)]))
+\end{lstlisting}
+Now we have the answer which is $a=2$,$b=3$,$c=6$,$d=8$,$e=1$,$f=4$,$g=9$ but this method is rather slow. In \url{http://www.codeskulptor.org/#user37_v9I1M7qi3q_0.py}, it exceeds time limit for my system.
+\section{Second solution}
+If we start solving it we will see that the equation $(10\times e+c)/f=f$ is the easiest to begin with. We get that $10\times e+c=f^2$ and we can compute $e$ and $c$ for $f=1..9$. For example if $f=4$,$f^2=16$,
+$e=1$ and $c=6$.
+If we incorporate this in the Python program we get:
+\begin{lstlisting}
+  posf = [1,2,3,4,5,6,7,8,9]
+  pose = [0,0,0,1,2,3,4,6,8]
+  posc = [1,4,9,6,5,6,9,4,1]
+  for (i,f) in enumerate(posf):
+    e = pose[i]
+    c = posc[i]
+    for a in range(0,10):
+      for b in range(0,10):
+        for d in range(0,10):
+          for g in range(0,10):
+            if ((10*a+b)*(10*b+c)==(d*100+a*10+d)):
+              if ((10*e+c)/f == f):
+                if ((100*b+10*c+d)*g==1000*b+100*b+10*e+a):
+                  if ((10*a+b)*(10*e+c)==(100*b+10*c+d)):
+                    if ((10*b+c)/f == g):
+                      if ((100*d+10*a+d) * f == (1000*b+100*b+10*e+a)):
+                        print(''.join([str(a),str(b),str(c),str(d),str(e),
+                          str(f),str(g)]))
+\end{lstlisting}
+This program is faster and in \url{http://www.codeskulptor.org/#user37_v9I1M7qi3q_1.py} it runs and gives the solution.
+\end{document}
