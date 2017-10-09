@@ -14,37 +14,41 @@ class factorDict():
             self.factors[factor] += 1
         else:
             self.factors[factor] = 1
-    def __str__(self):
+    def powerString(self):
         """
-        Only for printing the result
-        """
-        return("*".join([str(aFactor) if self.factors[aFactor]==1 
-            else str(aFactor) + "^" + str(self.factors[aFactor]) 
-            for aFactor in self.factors]))
-
-class sqrtFactorDict():
-    """
-    A wrapper for the factors of the square root
-    """
-    def __init__(self):
-        self.factors = {}
-    def __str__(self):
-        """
-        only for printing
+        Print the result in the form of powers
+        and square roots
         """
         retStrList = []
         for factor in self.factors:
             if self.factors[factor] == 0.5:
-                retStrList.append("sqrt(" + str(factor) + ")")
+                retStrList.append("√" + str(factor))
             elif self.factors[factor] == 1:
                 retStrList.append(str(factor))
             elif self.factors[factor] == 1.5:
-                retStrList.append(str(factor) + "*sqrt(" + str(factor) + ")")
+                retStrList.append(str(factor) + "*√" + str(factor))
             elif self.factors[factor] == int(self.factors[factor]):
                 retStrList.append(str(factor) + "^" + str(int(self.factors[factor])))
             else:
-                retStrList.append(str(factor) + "^" + str(int(self.factors[factor]-0.5)) + "*sqrt(" + str(factor) + ")")
+                retStrList.append(str(factor) + "^" + str(int(self.factors[factor]-0.5)) + "*√" + str(factor))
         return("*".join(retStrList))
+    def numberString(self):
+        number = 1
+        retSqrtList = []
+        for factor in self.factors:
+            if self.factors[factor] == int(self.factors[factor]):
+                number *= math.pow(factor,self.factors[factor])
+            else:
+                number *= math.pow(factor,self.factors[factor]-0.5)
+                retSqrtList.append("√" + str(factor))
+        if number == 1:
+            return("*".join(retSqrtList))
+        elif retSqrtList == []:
+            return(str(int(number)))
+        else:
+            return(str(int(number)) +"*" + "*".join(retSqrtList))
+
+
 
 
 
@@ -97,11 +101,13 @@ def squareRoot(x):
     Computes and returns the factors of the 
     square root as a simple dictionary
     """
-    sqrtFactors = sqrtFactorDict()
+    sqrtFactors = factorDict()
     for factor in primeFact(x).factors:
         sqrtFactors.factors[factor] = primeFact(x).factors[factor]/2
     return(sqrtFactors)
 
 x = int(input("Give number:"))
-print("x       = " + str(primeFact(x)))
-print("sqrt(x) = " + str(squareRoot(x)))
+print("x" + len(str(int(x)))*" " + " = " +str(int(x)))
+print("x" + len(str(int(x)))*" " + " = " +primeFact(x).powerString())
+print("√"+str(x)+ " = " + squareRoot(x).powerString())
+print("√"+str(x)+ " = " + squareRoot(x).numberString())
