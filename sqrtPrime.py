@@ -106,8 +106,9 @@ def squareRoot(x):
         sqrtFactors.factors[factor] = primeFact(x).factors[factor]/2
     return(sqrtFactors)
 
-x = int(input("Give number:"))
-print("x" + len(str(int(x)))*" " + " = " +str(int(x)))
-print("x" + len(str(int(x)))*" " + " = " +primeFact(x).powerString())
-print("√"+str(x)+ " = " + squareRoot(x).powerString())
-print("√"+str(x)+ " = " + squareRoot(x).numberString())
+while True:
+    x = int(input("Give number:"))
+    print("x" + len(str(int(x)))*" " + " = " +str(int(x)))
+    print("x" + len(str(int(x)))*" " + " = " +primeFact(x).powerString())
+    print("√"+str(x)+ " = " + squareRoot(x).powerString())
+    print("√"+str(x)+ " = " + squareRoot(x).numberString())

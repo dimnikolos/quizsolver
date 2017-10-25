@@ -16,4 +16,4 @@ def pascalTriangle(n):
 
 while True:
 	n = int(input('Give n:'))
-	print(",".join(pascalTriangle(n)))
+	print(",".join([str(x) for x in pascalTriangle(n)]))
